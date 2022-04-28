@@ -2,16 +2,21 @@ package main
 
 import (
 	"github.com/grafana/alertmanager-webhook-proxy/pkg/proxy"
+	"github.com/grafana/alertmanager-webhook-proxy/pkg/server"
 )
 
 func main() {
 	// TODO: Add configurable target host URL
-	p, err := proxy.New("http://localhost:8090")
+	p, pErr := proxy.New("http://localhost:8090")
+	srv := server.New(":8080", p)
 
-	if err != nil {
-		panic(err)
+	if pErr != nil {
+		panic(pErr)
 	}
 
-	// TODO: Add configurable listening port
-	proxy.Run(p, ":8080")
+	srvErr := server.Run(srv)
+
+	if srvErr != nil {
+		panic(srvErr)
+	}
 }
