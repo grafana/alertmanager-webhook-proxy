@@ -3,9 +3,12 @@ package proxy
 import (
 	"bytes"
 	"io/ioutil"
+	"os"
 	"testing"
 
 	"net/http"
+
+	"github.com/gkampitakis/go-snaps/snaps"
 )
 
 type test struct {
@@ -16,6 +19,14 @@ var tests = []test{
 	test{"https://taylorswift.com"},
 	test{"https://grafana.com"},
 	test{"https://play.grafana.com"},
+}
+
+func TestMain(t *testing.M) {
+	v := t.Run()
+
+	snaps.Clean()
+
+	os.Exit(v)
 }
 
 func TestNew(t *testing.T) {
@@ -60,4 +71,6 @@ func TestDecode(t *testing.T) {
 	if got != want {
 		t.Errorf("got %q, wanted %q", got, want)
 	}
+
+	snaps.MatchSnapshot(t, data)
 }
