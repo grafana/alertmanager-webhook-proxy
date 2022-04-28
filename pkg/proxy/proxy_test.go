@@ -1,6 +1,8 @@
 package proxy
 
 import (
+	"bytes"
+	"io/ioutil"
 	"testing"
 
 	"net/http"
@@ -34,5 +36,28 @@ func TestNew(t *testing.T) {
 		if got != want {
 			t.Errorf("got %q, wanted %q", got, want)
 		}
+	}
+}
+
+func TestDecode(t *testing.T) {
+	payload, rErr := ioutil.ReadFile("testdata/sample.json")
+
+	if rErr != nil {
+		t.Error("failed to read sample payload")
+	}
+
+	reader := bytes.NewReader(payload)
+
+	data, dErr := decode(reader)
+
+	if dErr != nil {
+		t.Errorf("failed to decode: %v", dErr)
+	}
+
+	got := data.Receiver
+	want := "webhook"
+
+	if got != want {
+		t.Errorf("got %q, wanted %q", got, want)
 	}
 }

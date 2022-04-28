@@ -1,9 +1,14 @@
 package proxy
 
 import (
+	"encoding/json"
+	"io"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+
+	"github.com/prometheus/alertmanager/template"
 )
 
 func New(targetHost string) (*httputil.ReverseProxy, error) {
@@ -24,6 +29,25 @@ func New(targetHost string) (*httputil.ReverseProxy, error) {
 	return proxy, nil
 }
 
+func decode(body io.Reader) (template.Data, error) {
+	if body == nil {
+		return template.Data{}, nil
+	}
+
+	decoder := json.NewDecoder(body)
+
+	var data template.Data
+
+	err := decoder.Decode(&data)
+
+	return data, err
+}
+
 func modifyRequest(req *http.Request) {
-	// TODO: Add request body translator
+	_, err := decode(req.Body)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
 }
