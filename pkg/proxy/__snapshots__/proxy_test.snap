@@ -1,0 +1,22 @@
+
+[TestDecode - 1]
+template.Data{
+    Receiver: "webhook",
+    Status:   "firing",
+    Alerts:   {
+        {
+            Status:       "firing",
+            Labels:       {"alertname":"Test", "dc":"eu-west-1", "instance":"localhost:9090", "job":"prometheus24"},
+            Annotations:  {"description":"some description"},
+            StartsAt:     time.Date(2018, time.August, 3, 9, 52, 26, 739266876, time.Location("")),
+            EndsAt:       time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC),
+            GeneratorURL: "http://example.com:9090/graph?g0.expr=go_memstats_alloc_bytes+%3E+0&g0.tab=1",
+            Fingerprint:  "",
+        },
+    },
+    GroupLabels:       {"alertname":"Test", "job":"prometheus24"},
+    CommonLabels:      {"alertname":"Test", "dc":"eu-west-1", "instance":"localhost:9090", "job":"prometheus24"},
+    CommonAnnotations: {"description":"some description"},
+    ExternalURL:       "http://example.com:9093",
+}
+---
