@@ -40,15 +40,11 @@ func TestRender(t *testing.T) {
 		t.Errorf("failed to decode: %v", dErr)
 	}
 
-	var b bytes.Buffer
-
-	reErr := Render(&b, tmpl, data)
+	s, reErr := Render(tmpl, data)
 
 	if reErr != nil {
 		t.Errorf("failed to render: %v", reErr)
 	}
-
-	s := b.String()
 
 	if !json.Valid([]byte(s)) {
 		t.Errorf("invalid json: %v", s)

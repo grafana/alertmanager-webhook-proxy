@@ -1,7 +1,7 @@
 package templater
 
 import (
-	"io"
+	"bytes"
 	"text/template"
 
 	amt "github.com/prometheus/alertmanager/template"
@@ -13,8 +13,10 @@ func New(path string) (*template.Template, error) {
 	return t, err
 }
 
-func Render(wr io.Writer, t *template.Template, data amt.Data) error {
-	err := t.Execute(wr, data)
+func Render(t *template.Template, data amt.Data) (string, error) {
+	var b bytes.Buffer
 
-	return err
+	err := t.Execute(&b, data)
+
+	return b.String(), err
 }
