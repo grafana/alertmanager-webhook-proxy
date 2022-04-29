@@ -29,7 +29,7 @@ func New(targetHost string) (*httputil.ReverseProxy, error) {
 	return proxy, nil
 }
 
-func decode(body io.Reader) (template.Data, error) {
+func Decode(body io.Reader) (template.Data, error) {
 	if body == nil {
 		return template.Data{}, nil
 	}
@@ -44,7 +44,7 @@ func decode(body io.Reader) (template.Data, error) {
 }
 
 func modifyRequest(req *http.Request) {
-	_, err := decode(req.Body)
+	_, err := Decode(req.Body)
 
 	if err != nil {
 		log.Println(err)

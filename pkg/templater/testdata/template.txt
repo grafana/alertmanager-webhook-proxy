@@ -1,0 +1,19 @@
+{
+  "alerts": [
+    {{range $index, $alert := .Alerts}}
+    {{if $index}},{{end}}
+    {
+      "name": "{{.Labels.alertname}}",
+      "severity": "{{.Labels.severity}}",
+      "description": "{{.Annotations.description}}",
+      "source": "grafana-cloud",
+      "time": "{{.StartsAt}}",
+      "extra": {
+        "type": "application",
+        "env": "{{.Labels.environment}}",
+        "ci": "{{.Labels.ci}}"
+      }
+    }
+    {{end}}
+  ]
+}

@@ -59,7 +59,7 @@ func TestDecode(t *testing.T) {
 
 	reader := bytes.NewReader(payload)
 
-	data, dErr := decode(reader)
+	data, dErr := Decode(reader)
 
 	if dErr != nil {
 		t.Errorf("failed to decode: %v", dErr)
