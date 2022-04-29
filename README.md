@@ -4,7 +4,7 @@
 
 A reverse proxy for the Prometheus AlertManager webhook notifier. This proxy service can take in a GoLang template to modify the payload for consumers that do not support the AlertManager webhook payload.
 
-## Building
+## Build
 
 ```sh
 $ go build -o awp ./cmd/main.go
@@ -15,6 +15,12 @@ $ go build -o awp ./cmd/main.go
 ```sh
 $ ./awp -address=":8080" -target="http://my.consumer.io" -template="./template.txt"
 ```
+
+| Command Flag | Default | Description |
+| ------------ | ------- | ----------- |
+| `-address`   | `:8080` | Server bind address |
+| `-target`    | `http://localhost:8090` | Target URL |
+| `-template`  | `/tmp/awp/template.txt` | Path to payload transformation template |
 
 ## Templating
 

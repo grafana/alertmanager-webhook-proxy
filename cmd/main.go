@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-	tmplPtr := flag.String("template", "/tmp/awp/template.txt", "Path to alert payload transformation template")
-	targetPtr := flag.String("target", "http://localhost:8090", "Target URL")
 	addressPtr := flag.String("address", ":8080", "Server bind address")
+	targetPtr := flag.String("target", "http://localhost:8090", "Target URL")
+	tmplPtr := flag.String("template", "/tmp/awp/template.txt", "Path to payload transformation template")
 
 	flag.Parse()
 
