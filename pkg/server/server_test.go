@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/grafana/alertmanager-webhook-proxy/pkg/proxy"
+	"github.com/grafana/alertmanager-webhook-proxy/pkg/templater"
 )
 
 type test struct {
@@ -18,7 +19,8 @@ var tests = []test{
 
 func TestNew(t *testing.T) {
 	for _, test := range tests {
-		p, _ := proxy.New("https://taylorswift.com")
+		tmpl, _ := templater.New("testdata/template.txt")
+		p, _ := proxy.New("https://taylorswift.com", tmpl)
 		srv := New(test.addr, p)
 
 		got := srv.Addr

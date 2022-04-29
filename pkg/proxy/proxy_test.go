@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/gkampitakis/go-snaps/snaps"
+	"github.com/grafana/alertmanager-webhook-proxy/pkg/templater"
 )
 
 type test struct {
@@ -31,7 +32,8 @@ func TestMain(t *testing.M) {
 
 func TestNew(t *testing.T) {
 	for _, test := range tests {
-		p, err := New(test.target)
+		tmpl, _ := templater.New("testdata/template.txt")
+		p, err := New(test.target, tmpl)
 
 		if err != nil {
 			t.Errorf("Error: %v", err)

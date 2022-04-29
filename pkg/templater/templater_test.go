@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
-	"github.com/grafana/alertmanager-webhook-proxy/pkg/proxy"
+	amt "github.com/prometheus/alertmanager/template"
 )
 
 func TestMain(t *testing.M) {
@@ -32,9 +32,10 @@ func TestRender(t *testing.T) {
 		t.Error("failed to read sample payload")
 	}
 
+	var data amt.Data
 	reader := bytes.NewReader(payload)
-
-	data, dErr := proxy.Decode(reader)
+	decoder := json.NewDecoder(reader)
+	dErr := decoder.Decode(&data)
 
 	if dErr != nil {
 		t.Errorf("failed to decode: %v", dErr)
