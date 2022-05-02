@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"log"
 
 	"github.com/grafana/alertmanager-webhook-proxy/pkg/proxy"
 	"github.com/grafana/alertmanager-webhook-proxy/pkg/server"
@@ -14,6 +15,10 @@ func main() {
 	tmplPtr := flag.String("template", "/tmp/awp/template.txt", "Path to payload transformation template")
 
 	flag.Parse()
+
+	log.Printf("Bind address: %v", *addressPtr)
+	log.Printf("Target address: %v", *targetPtr)
+	log.Printf("Template path: %v", *tmplPtr)
 
 	tmpl, _ := templater.New(*tmplPtr)
 	p, pErr := proxy.New(*targetPtr, tmpl)
