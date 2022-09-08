@@ -12,6 +12,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/google/uuid"
 	"github.com/grafana/alertmanager-webhook-proxy/pkg/templater"
 	amt "github.com/prometheus/alertmanager/template"
 )
@@ -89,6 +90,10 @@ func modifyRequest(
 	req.Body = ioutil.NopCloser(bytes.NewBufferString(s))
 
 	for k, v := range hMap {
+		if v == "{{uuid}}" {
+			v = uuid.NewString()
+		}
+
 		log.Printf("Header: %v %v", k, v)
 		req.Header.Set(k, v)
 	}
