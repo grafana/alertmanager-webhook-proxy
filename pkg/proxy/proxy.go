@@ -9,13 +9,30 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strings"
 	"text/template"
 
+	"github.com/google/uuid"
 	"github.com/grafana/alertmanager-webhook-proxy/pkg/templater"
 	amt "github.com/prometheus/alertmanager/template"
 )
 
-func New(targetHost string, tmpl *template.Template) (*httputil.ReverseProxy, error) {
+type ArrayFlag []string
+
+func (i *ArrayFlag) String() string {
+	return ""
+}
+
+func (i *ArrayFlag) Set(value string) error {
+	*i = append(*i, value)
+	return nil
+}
+
+func New(
+	targetHost string,
+	tmpl *template.Template,
+	headers ArrayFlag,
+) (*httputil.ReverseProxy, error) {
 	url, err := url.Parse(targetHost)
 
 	if err != nil {
@@ -24,10 +41,18 @@ func New(targetHost string, tmpl *template.Template) (*httputil.ReverseProxy, er
 
 	proxy := httputil.NewSingleHostReverseProxy(url)
 
+	hMap := make(map[string]string)
+	for _, h := range headers {
+		s := strings.Split(h, ": ")
+		hMap[s[0]] = s[1]
+	}
+
+	log.Println(hMap)
+
 	originalDirector := proxy.Director
 	proxy.Director = func(req *http.Request) {
 		originalDirector(req)
-		modifyRequest(req, tmpl)
+		modifyRequest(req, tmpl, hMap)
 	}
 
 	return proxy, nil
@@ -47,7 +72,11 @@ func Decode(body io.Reader) (amt.Data, error) {
 	return data, err
 }
 
-func modifyRequest(req *http.Request, tmpl *template.Template) {
+func modifyRequest(
+	req *http.Request,
+	tmpl *template.Template,
+	hMap map[string]string,
+) {
 	d, err := Decode(req.Body)
 
 	if err != nil {
@@ -59,4 +88,13 @@ func modifyRequest(req *http.Request, tmpl *template.Template) {
 
 	req.ContentLength = int64(len(s))
 	req.Body = ioutil.NopCloser(bytes.NewBufferString(s))
+
+	for k, v := range hMap {
+		if v == "{{uuid}}" {
+			v = uuid.NewString()
+		}
+
+		log.Printf("Header: %v %v", k, v)
+		req.Header.Set(k, v)
+	}
 }
