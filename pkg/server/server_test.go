@@ -20,7 +20,11 @@ var tests = []test{
 func TestNew(t *testing.T) {
 	for _, test := range tests {
 		tmpl, _ := templater.New("testdata/template.txt")
-		p, _ := proxy.New("https://taylorswift.com", tmpl)
+		var h proxy.ArrayFlag
+		h.Set("Album: Midnights")
+		h.Set("TransactionId: {{uuid}}")
+
+		p, _ := proxy.New("https://taylorswift.com", tmpl, h)
 		srv := New(test.addr, p)
 
 		got := srv.Addr

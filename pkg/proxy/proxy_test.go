@@ -33,7 +33,11 @@ func TestMain(t *testing.M) {
 func TestNew(t *testing.T) {
 	for _, test := range tests {
 		tmpl, _ := templater.New("testdata/template.txt")
-		p, err := New(test.target, tmpl)
+		var h ArrayFlag
+		h.Set("Album: Midnights")
+		h.Set("TransactionId: {{uuid}}")
+
+		p, err := New(test.target, tmpl, h)
 
 		if err != nil {
 			t.Errorf("Error: %v", err)
