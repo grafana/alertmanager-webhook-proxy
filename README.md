@@ -30,3 +30,4 @@ payload.
 For GoLang templating syntax, check out the [documentation](https://pkg.go.dev/text/template).
 The AlertManager webhook payload data format is detailed [here](https://prometheus.io/docs/alerting/latest/configuration/#webhook_config).
 Example templates can be found in the `templater` [test data directory](pkg/templater/testdata).
+test
